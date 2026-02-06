@@ -1,0 +1,39 @@
+repos:
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.97.0
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_validate
+      - id: terraform_tflint
+        args:
+          - "--args=--only=terraform_deprecated_interpolation"
+          - "--args=--only=terraform_deprecated_index"
+          - "--args=--only=terraform_unused_declarations"
+          - "--args=--only=terraform_comment_syntax"
+          - "--args=--only=terraform_documented_outputs"
+          - "--args=--only=terraform_documented_variables"
+          - "--args=--only=terraform_typed_variables"
+          - "--args=--only=terraform_module_pinned_source"
+          - "--args=--only=terraform_naming_convention"
+          - "--args=--only=terraform_required_version"
+          - "--args=--only=terraform_required_providers"
+          - "--args=--only=terraform_workspace_remote"
+  #Trivy
+  - repo: https://github.com/mxab/pre-commit-trivy.git
+    rev: v0.13.0
+    hooks:
+      - id: trivyfs-docker
+        args:
+          - --scanners=vuln,secret,misconfig
+          - --severity=CRITICAL,HIGH
+          - --skip-dirs="**/.terraform"
+          - ./
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+  - repo: https://github.com/zricethezav/gitleaks
+    rev: v8.23.1
+    hooks:
+      - id: gitleaks
+
