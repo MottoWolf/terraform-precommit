@@ -1,0 +1,6 @@
+name: Pre-Commit
+
+on: push
+jobs:
+  build:
+    uses: MottoWolf/terraform-precommit/.github/workflows/pre-commit-gha.yaml@main
