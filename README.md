@@ -2,6 +2,8 @@
 
 ## Overview
 
+Reusable pre-commit hooks and CI/CD workflows for Terraform projects. Consumers reference this repo's tags to pin versions and get consistent Terraform validation, security scanning, and secret detection across all their repos.
+
 ## Features
 
 - **Pre-commit Workflows**: Automated checks for code quality and consistency
@@ -30,18 +32,19 @@
 
 ## Local Setup
 
-### Setup
+### Prerequisites
 
-1. Install pre-commit hooks:
+Install the required tools:
 
-   ```bash
-   pipx install pre-commit
-   curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
-   ```
+```bash
+pipx install pre-commit
+curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+```
 
 ### Quick Setup using an alias
 
-For local usage, you can add this function to your shell configuration (e.g., `~/.bashrc` or `~/.zshrc`) :
+For local usage, you can add this function to your shell configuration (e.g., `~/.bashrc` or `~/.zshrc`):
 
 ```bash
 pre-commit-run() {
@@ -63,7 +66,7 @@ pre-commit-run() {
     }
 
     # Always clean up temp dir
-    trap 'rm -rf "$temp_dir" ".pre-commit-trivy-cache" 2>/dev/null || true' EXIT
+    trap 'rm -rf "$temp_dir" 2>/dev/null || true' EXIT
 
     echo "Downloading configuration files from branch: $branch"
 
@@ -89,11 +92,14 @@ pre-commit-run() {
 
 ### Available Hooks
 
-The pre-commit configuration includes:
-
-- Terraform formatting and validation
-- Linting for various file types
-- Security checks
+| Hook | Tool | What it checks |
+|------|------|----------------|
+| `terraform_fmt` | antonbabenko/pre-commit-terraform | Terraform formatting |
+| `terraform_validate` | antonbabenko/pre-commit-terraform | Terraform configuration validity |
+| `terraform_tflint` | antonbabenko/pre-commit-terraform | Terraform linting with AWS ruleset |
+| `trivy` | Trivy (binary) | Vulnerabilities, secrets, misconfigurations |
+| `check-yaml` | pre-commit-hooks | YAML syntax validation |
+| `gitleaks` | gitleaks | Hardcoded secrets detection |
 
 ### Usage
 
@@ -108,6 +114,6 @@ Or let them run automatically on git commit using the GitHub Actions Workflow.
 ## Configuration Files
 
 - `.github/workflows/pre-commit-gha.yaml`: GitHub Actions reusable workflow
-- `.pre-commit-config.yaml`: Defines pre-commit hooks and their configurations
-- `.tflint.hcl`: Terraform linter configuration
+- `config/.pre-commit-config.yaml`: Pre-commit hooks configuration
+- `config/.tflint.hcl`: Terraform linter configuration (AWS plugin)
 - `renovate.json`: Automated dependency update configuration
