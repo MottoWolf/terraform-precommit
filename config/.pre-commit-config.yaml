@@ -6,15 +6,13 @@ repos:
       - id: terraform_validate
       - id: terraform_tflint
   #Trivy
-  - repo: https://github.com/mxab/pre-commit-trivy.git
-    rev: v0.17.0
+  - repo: local
     hooks:
-      - id: trivyfs-docker
-        args:
-          - --scanners=vuln,secret,misconfig
-          - --severity=CRITICAL,HIGH
-          - --skip-dirs=.terraform
-          - ./
+      - id: trivy
+        name: trivy
+        entry: trivy fs --scanners=vuln,secret,misconfig --severity=CRITICAL,HIGH --skip-dirs=.terraform ./
+        language: system
+        pass_filenames: false
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:

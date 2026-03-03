@@ -23,7 +23,7 @@ name: Pre-Commit
 on: pull_request
 jobs:
   build:
-    uses: MottoWolf/terraform-precommit/config/pre-commit-gha.yaml@main
+    uses: MottoWolf/terraform-precommit/.github/workflows/pre-commit-gha.yaml@main
 
 ```
 4. Now terraform pre-commit it´s activated!
@@ -105,7 +105,7 @@ Or let them run automatically on git commit using the GitHub Actions Workflow.
 
 ## Configuration Files
 
-- `pre-commit-gha.yaml`: GitHub Actions version
+- `.github/workflows/pre-commit-gha.yaml`: GitHub Actions reusable workflow
 - `.pre-commit-config.yaml`: Defines pre-commit hooks and their configurations
 - `.tflint.hcl`: Terraform linter configuration
 - `renovate.json`: Automated dependency update configuration
