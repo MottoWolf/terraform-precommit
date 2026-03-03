@@ -1,6 +1,6 @@
+# terraform-precommit
+
 ## Overview
-
-
 
 ## Features
 
@@ -17,15 +17,15 @@
 2. Create the GitHub Actions workflow with the name you want (like `pre-commit.yaml`)
 3. Paste this to activate it in the repo
 
-```yaml
-name: Pre-Commit
+   ```yaml
+   name: Pre-Commit
 
-on: pull_request
-jobs:
-  build:
-    uses: MottoWolf/terraform-precommit/.github/workflows/pre-commit-gha.yaml@main
+   on: pull_request
+   jobs:
+     build:
+       uses: MottoWolf/terraform-precommit/.github/workflows/pre-commit-gha.yaml@main
+   ```
 
-```
 4. Now terraform pre-commit it´s activated!
 
 ## Local Setup
@@ -33,6 +33,7 @@ jobs:
 ### Setup
 
 1. Install pre-commit hooks:
+
    ```bash
    pipx install pre-commit
    curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
@@ -86,10 +87,10 @@ pre-commit-run() {
 }
 ```
 
-
 ### Available Hooks
 
 The pre-commit configuration includes:
+
 - Terraform formatting and validation
 - Linting for various file types
 - Security checks
@@ -97,6 +98,7 @@ The pre-commit configuration includes:
 ### Usage
 
 Run pre-commit checks manually locally:
+
 ```bash
 pre-commit-run
 ```
