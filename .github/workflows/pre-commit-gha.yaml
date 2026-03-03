@@ -137,17 +137,28 @@ jobs:
     runs-on: ubuntu-24.04
     needs: terraform_validate
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - name: Run Trivy vulnerability scanner in IaC mode
-        uses: aquasecurity/trivy-action@97e0b3872f55f89b95b2f65b3dbab56962816478 # v0.34.2
+      - name: Checkout precommit config
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
-          scan-type: "fs"
-          hide-progress: false
-          exit-code: "1"
-          scanners: "vuln,secret,misconfig"
-          severity: "CRITICAL,HIGH"
-          skip-dirs: ".terraform"
+          repository: MottoWolf/terraform-precommit
+          path: terraform-precommit
+      - name: Install Python ${{ env.PY_VERSION }}.X
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
+        with:
+          python-version: ${{ env.PY_VERSION }}
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+      - name: Install pre-commit dependencies
+        run: |
+          pip install pre-commit
+      - name: Copy precommit config
+        run: |
+          cp -r -n terraform-precommit/config/. -t $GITHUB_WORKSPACE
+      - name: Execute pre-commit
+        run: pre-commit run trivy --color=always --show-diff-on-failure --all-files
 
   gitleaks:
     name: gitleaks
